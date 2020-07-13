@@ -6,7 +6,6 @@ export default function TextDisplay(props) {
   useEffect(() => {
     const words = text.split(' ');
     let formattedWords = words.map((word, i) => {
-      console.log(i, text.split(' ').length);
       return {
         // add space till last word
         value: `${word}${i < words.length - 1 ? ' ' : ''}`,
