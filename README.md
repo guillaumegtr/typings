@@ -1,10 +1,10 @@
-# Typings
+# Typings ⌨
 
-Typing app for keyboard testing 🧾
+Typing app for keyboard testing
 
 Made with React
 
-## In progress/ Ideas
+## In progress/ Ideas 💡
 
 [ ] Typing screen
 
