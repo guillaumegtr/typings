@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
 export default function TextDisplay(props) {
-  const { text } = props;
-  const [displayWords, setDisplayWords] = useState(['']);
-  useEffect(() => {
-    const words = text.split(' ');
-    let formattedWords = words.map((word, i) => {
-      return {
-        // add space till last word
-        value: `${word}${i < words.length - 1 ? ' ' : ''}`,
-        cssClass: 'default' || 'current',
-      };
-    });
+  const { words } = props;
+  const [wordList, setWorldList] = useState(['']);
 
-    setDisplayWords(formattedWords);
-  }, [text]);
+  useEffect(() => {
+    setWorldList(words);
+  }, [words]);
 
   return (
     <div>
-      {displayWords.map((word, i) => (
-        <span key={i} className={word.cssClass}>
+      {wordList.map((word, i) => (
+        <span key={i} className={word.className}>
           {word.value}
         </span>
       ))}
