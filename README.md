@@ -12,7 +12,7 @@ Made with React
 
 [ ] Support multiple languages
 
-[ x ] Allow multiple themes
+[ ] Allow multiple themes
 
 [ ] Animate when typing (Anime.js)
 
