@@ -1,0 +1,27 @@
+@use './sass/home.scss';
+@use './sass/page-not-found.scss';
+@use './sass/display.scss';
+@use './sass/typing-box.scss';
+@use './sass/core.scss';
+@use './sass/input-bar.scss';
+@import './sass/variables';
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;300;400&display=swap');
+
+body {
+  font-family: 'Roboto Mono', monospace;
+  background: $background-primary;
+  color: $text-dark;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1.6rem;
+  margin: 0;
+  min-height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+
+  #root {
+    width: 100%;
+  }
+}
