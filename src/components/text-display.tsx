@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-export default function TextDisplay(props) {
+interface TextDisplayProps {
+  words: Array<string>;
+}
+
+const TextDisplay = (props: TextDisplayProps) => {
   const { words } = props;
   const [wordList, setWorldList] = useState(['']);
 
@@ -17,4 +21,6 @@ export default function TextDisplay(props) {
       ))}
     </div>
   );
-}
+};
+
+export default TextDisplay;

@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { Timer } from '../scripts/timer';
 const SEPERATOR = ' ';
 
-export default function InputBar(props) {
+interface InputBarProps {
+  handleKeyStroke: Function;
+  handleRedo: Function;
+}
+
+const InputBar: React.FC = (props: InputBarProps) => {
   const { handleKeyStroke, handleRedo } = props;
   const [userInput, setUserInput] = useState('');
 
@@ -13,6 +19,17 @@ export default function InputBar(props) {
     if (e.key === SEPERATOR && userInput.length > 0) {
       handleKeyStroke(userInput);
       setUserInput('');
+    }
+
+    const timer = Timer.getInstance();
+
+    // start timer on first input
+    if (!timer.isStarted()) {
+      console.log('starting timer...');
+      timer.start();
+      setInterval(() => {
+        console.log(timer.getTime());
+      }, 1000);
     }
   };
 
@@ -37,4 +54,6 @@ export default function InputBar(props) {
       </button>
     </div>
   );
-}
+};
+
+export default InputBar;

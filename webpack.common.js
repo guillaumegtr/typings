@@ -9,6 +9,9 @@ module.exports = {
     filename: '[name].bundle.js',
     publicPath: '/',
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+  },
   module: {
     rules: [
       {
@@ -27,6 +30,7 @@ module.exports = {
           'sass-loader',
         ],
       },
+      { test: /\.tsx?$/, loader: 'ts-loader' },
     ],
   },
   plugins: [

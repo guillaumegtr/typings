@@ -3,7 +3,7 @@ import Home from './routes/home';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import PageNotFound from './routes/page-not-found';
 
-export default function Entry() {
+const Entry: React.FC = () => {
   return (
     <BrowserRouter>
       <Switch>
@@ -13,4 +13,6 @@ export default function Entry() {
       </Switch>
     </BrowserRouter>
   );
-}
+};
+
+export default Entry;

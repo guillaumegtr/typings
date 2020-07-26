@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import TextDisplay from './text-display';
 import InputBar from './input-bar';
+import { Timer } from '../scripts/timer';
 
-export default function TypingBox() {
+interface TypingBoxProps {
+  timer: Timer;
+}
+
+const TypingBox = (props: TypingBoxProps) => {
+  const { timer } = props;
+
   const [text, setText] = useState('');
   const [formattedWords, setFormattedWords] = useState(['']);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -55,6 +62,8 @@ export default function TypingBox() {
     } else {
       // done
       reset();
+      // TODO: stop timer and count WPM
+      Timer.getInstance().pause();
     }
 
     if (keyStroke === formattedWords[currentWordIndex].value) {
@@ -76,4 +85,6 @@ export default function TypingBox() {
       <InputBar handleKeyStroke={handleKeyStroke} handleRedo={reset} />
     </div>
   );
-}
+};
+
+export default TypingBox;
