@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 const SEPERATOR = ' ';
 
 export default function InputBar(props) {
-  const { handleKeyStroke } = props;
+  const { handleKeyStroke, handleRedo } = props;
   const [userInput, setUserInput] = useState('');
 
   useEffect(() => {
@@ -14,6 +14,10 @@ export default function InputBar(props) {
       handleKeyStroke(userInput);
       setUserInput('');
     }
+  };
+
+  const handleClick = () => {
+    handleRedo();
   };
 
   return (
@@ -28,7 +32,9 @@ export default function InputBar(props) {
         onChange={(event) => setUserInput(event.target.value)}
         onKeyDown={handleKeyDown}
       />
-      <button className="redo-button primary">Redo</button>
+      <button className="redo-button primary" onClick={handleClick}>
+        Redo
+      </button>
     </div>
   );
 }

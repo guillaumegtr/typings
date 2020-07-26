@@ -6,33 +6,58 @@ export default function TypingBox() {
   const [text, setText] = useState('');
   const [formattedWords, setFormattedWords] = useState(['']);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentWord, setCurrentWord] = useState(0);
   const [isDone, setIsDone] = useState(false);
 
-  useEffect(() => {
+  const getText = () => {
+    // TODO: get from api
     setText('with own hold great stand ask without group one now');
-    const words = text.split(' ');
-    let formattedWords = words.map((word, i) => {
+  };
+
+  const formatWords = (words, isReset) => {
+    let index = 0;
+    if (isReset) {
+      setIsDone(false);
+      setCurrentWordIndex(0);
+      index = 0;
+    } else {
+      index = currentWordIndex;
+    }
+    return words.map((word, i) => {
       return {
         value: `${word}${i < words.length - 1 ? ' ' : ''}`,
-        className: currentWordIndex === i ? 'current' : undefined,
+        className: index === i ? 'current' : undefined,
       };
     });
+  };
+
+  const reset = () => {
+    setIsDone(true);
+    getText();
+  };
+
+  useEffect(() => {
+    getText();
+  }, []);
+
+  useEffect(() => {
+    const words = text.split(' ');
+
+    let formattedWords = formatWords(words, isDone);
     setFormattedWords(formattedWords);
-  }, [text]);
+  }, [text, isDone]);
 
   const handleKeyStroke = (keyStroke) => {
     let nextWordIndex = currentWordIndex;
-    let a = currentWordIndex;
     if (isNotLastWord()) {
       keyStroke = keyStroke.concat(' ');
       nextWordIndex++;
       formattedWords[nextWordIndex].className = 'current';
     } else {
-      setIsDone(true);
+      // done
+      reset();
     }
 
-    if (keyStroke === formattedWords[a].value) {
+    if (keyStroke === formattedWords[currentWordIndex].value) {
       formattedWords[currentWordIndex].className = 'done';
     } else {
       formattedWords[currentWordIndex].className = 'error';
@@ -47,8 +72,8 @@ export default function TypingBox() {
 
   return (
     <div className="typing-box card">
-      <TextDisplay words={formattedWords} currentWord={currentWord} />
-      <InputBar handleKeyStroke={handleKeyStroke} />
+      <TextDisplay words={formattedWords} />
+      <InputBar handleKeyStroke={handleKeyStroke} handleRedo={reset} />
     </div>
   );
 }
