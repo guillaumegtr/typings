@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import TextDisplay from './text-display';
 import InputBar from './input-bar';
+import { Timer } from '../scripts/timer';
+import { Round } from '../models/round';
 
-export default function TypingBox() {
+interface TypingBoxProps {
+  currentRound: Round;
+  showScore: Function;
+}
+
+const TypingBox: React.FC<TypingBoxProps> = (props) => {
+  const { currentRound, showScore } = props;
   const [text, setText] = useState('');
   const [formattedWords, setFormattedWords] = useState(['']);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isDone, setIsDone] = useState(false);
+
+  const timer = Timer.getInstance();
 
   const getText = () => {
     // TODO: get from api
     setText('with own hold great stand ask without group one now');
   };
 
-  const formatWords = (words, isReset) => {
+  const formatWords = (words, isReset): [] => {
     let index = 0;
     if (isReset) {
       setIsDone(false);
@@ -30,9 +40,14 @@ export default function TypingBox() {
     });
   };
 
-  const reset = () => {
+  const reset = (isButton?: boolean) => {
     setIsDone(true);
     getText();
+    timer.pause();
+    if (!isButton) {
+      currentRound.calculateWPM(timer.getTime());
+    }
+    showScore();
   };
 
   useEffect(() => {
@@ -41,9 +56,9 @@ export default function TypingBox() {
 
   useEffect(() => {
     const words = text.split(' ');
-
     let formattedWords = formatWords(words, isDone);
     setFormattedWords(formattedWords);
+    currentRound.setWordCount(formattedWords.length);
   }, [text, isDone]);
 
   const handleKeyStroke = (keyStroke) => {
@@ -61,6 +76,7 @@ export default function TypingBox() {
       formattedWords[currentWordIndex].className = 'done';
     } else {
       formattedWords[currentWordIndex].className = 'error';
+      currentRound.addError();
     }
 
     setCurrentWordIndex(nextWordIndex);
@@ -73,7 +89,13 @@ export default function TypingBox() {
   return (
     <div className="typing-box card">
       <TextDisplay words={formattedWords} />
-      <InputBar handleKeyStroke={handleKeyStroke} handleRedo={reset} />
+      <InputBar
+        handleKeyStroke={handleKeyStroke}
+        handleRedo={reset}
+        round={currentRound}
+      />
     </div>
   );
-}
+};
+
+export default TypingBox;

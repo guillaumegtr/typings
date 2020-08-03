@@ -6,7 +6,7 @@ Made with React
 
 ## In progress/ Ideas 💡
 
-[ ] Typing screen
+[ ✔️ ] Typing screen
 
 [ ] Create API to get random words
 
@@ -16,6 +16,6 @@ Made with React
 
 [ ] Animate when typing (Anime.js)
 
-[ ] Calculate WPM
+[ ✔️ ] Calculate WPM
 
 [ ] Not found page
