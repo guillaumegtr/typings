@@ -80,4 +80,8 @@ export class Timer {
   getTime = (): Time => {
     return this.time;
   };
+
+  clearTime = () => {
+    this.time = { minutes: 0, seconds: 0 };
+  };
 }

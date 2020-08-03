@@ -1,40 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Timer } from '../scripts/timer';
+import { Round } from '../models/round';
 const SEPERATOR = ' ';
+const excludedChars = [
+  'SHIFT',
+  'CONTROL',
+  'ALT',
+  'BACKSPACE',
+  'ENTER',
+  'DELETE',
+  'HOME',
+  'END',
+  'ESCAPE',
+];
 
 interface InputBarProps {
   handleKeyStroke: Function;
   handleRedo: Function;
+  round: Round;
 }
 
-const InputBar: React.FC = (props: InputBarProps) => {
-  const { handleKeyStroke, handleRedo } = props;
+const InputBar: React.FC<InputBarProps> = (props) => {
+  const { handleKeyStroke, handleRedo, round } = props;
   const [userInput, setUserInput] = useState('');
+  const inputRef = useRef(null);
+  const timer = Timer.getInstance();
 
   useEffect(() => {
     setUserInput(userInput.includes(' ') ? '' : userInput);
   }, [userInput]);
 
   const handleKeyDown = (e) => {
-    if (e.key === SEPERATOR && userInput.length > 0) {
+    const { key } = e;
+    if (key === SEPERATOR && userInput.length > 0) {
       handleKeyStroke(userInput);
       setUserInput('');
     }
-
-    const timer = Timer.getInstance();
-
-    // start timer on first input
+    if (!excludedChars.includes(key.toUpperCase())) {
+      round.countEntry();
+    }
+    //if (key !== 'Backspace' && true)
     if (!timer.isStarted()) {
-      console.log('starting timer...');
       timer.start();
-      setInterval(() => {
-        console.log(timer.getTime());
-      }, 1000);
     }
   };
 
   const handleClick = () => {
-    handleRedo();
+    inputRef.current.focus();
+    setUserInput('');
+    handleRedo(true);
   };
 
   return (
@@ -48,6 +62,7 @@ const InputBar: React.FC = (props: InputBarProps) => {
         value={userInput}
         onChange={(event) => setUserInput(event.target.value)}
         onKeyDown={handleKeyDown}
+        ref={inputRef}
       />
       <button className="redo-button primary" onClick={handleClick}>
         Redo
