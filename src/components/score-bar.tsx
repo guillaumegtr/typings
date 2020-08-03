@@ -10,7 +10,10 @@ const ScoreBar: React.FC<ScoreBarProps> = (props) => {
 
   return (
     <div className="score-bar">
-      <span>WPM: {wpm}</span> <span>ACC: {accuracy * 100} %</span>
+      <span>WPM: {wpm}</span>
+      {/* TODO: animate letter here */}
+      <span></span>
+      <span>🎯: {accuracy} %</span>
     </div>
   );
 };

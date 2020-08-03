@@ -52,7 +52,10 @@ export class Round {
     return this.WPM;
   };
 
+  /**
+   * returns accuracy ready for display in %
+   */
   getAccuracy = () => {
-    return this.accuracy;
+    return Math.round(this.accuracy * 100);
   };
 }
