@@ -4,6 +4,9 @@
   background-color: $background-secondary;
   // width: 100%;
   // max-width: 40rem;
+  .word {
+    color: $text-dark;
+  }
 
   .current {
     color: $text-current;
@@ -15,9 +18,5 @@
 
   .done {
     color: $text-done;
-  }
-
-  .word {
-    color: $text-dark;
   }
 }

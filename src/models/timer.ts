@@ -30,7 +30,6 @@ export class Timer {
     if (!this.running) {
       this.startTime = new Date().getTime();
       this.timeInterval = window.setInterval(this.calculateTime, 1000);
-
       this.paused = false;
       this.running = true;
     }
@@ -53,7 +52,7 @@ export class Timer {
     clearInterval(this.timeInterval);
     this.savedTime = 0;
     this.difference = 0;
-    this.paused = false;
+    this.paused = true;
     this.running = false;
   };
 
