@@ -19,3 +19,5 @@ Made with React
 [ ✔️ ] Calculate WPM
 
 [ ] Not found page
+
+[ ] Tests (important)
