@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import DisplayWord from './display-word';
+import { Word } from '../models/word';
 
 interface TextDisplayProps {
-  words: Array<string>;
+  words: Array<Word>;
 }
 
 const TextDisplay = (props: TextDisplayProps) => {
   const { words } = props;
-  const [wordList, setWorldList] = useState(['']);
-
-  useEffect(() => {
-    setWorldList(words);
-  }, [words]);
+  const wordCount = words.length - 1;
 
   return (
     <div>
-      {wordList.map((word, i) => (
-        <span key={i} className={word.className}>
-          {word.value}
-        </span>
+      {words.map((word, i) => (
+        <DisplayWord index={i} word={word} isLast={i == wordCount} />
       ))}
     </div>
   );

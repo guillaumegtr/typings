@@ -1,94 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import TextDisplay from './text-display';
 import InputBar from './input-bar';
-import { Timer } from '../scripts/timer';
+import { Timer } from '../models/timer';
 import { Round } from '../models/round';
+import { Word } from '../models/word';
 
 interface TypingBoxProps {
   currentRound: Round;
   showScore: Function;
 }
 
-const TypingBox: React.FC<TypingBoxProps> = (props) => {
+const TypingBox: React.FC<TypingBoxProps> = (props: TypingBoxProps) => {
   const { currentRound, showScore } = props;
   const [text, setText] = useState('');
-  const [formattedWords, setFormattedWords] = useState(['']);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [isDone, setIsDone] = useState(false);
+  const [words, setWords] = useState<Word[]>();
 
   const timer = Timer.getInstance();
 
-  const getText = () => {
-    // TODO: get from api
-    setText('with own hold great stand ask without group one now');
+  const initText = () => {
+    const text = 'with own hold great stand ask without group one now';
+    setText(text);
+    setCurrentWordIndex(0);
+    initWords(text.split(' '));
+    currentRound.setWordCount(text.split(' ').length);
   };
 
-  const formatWords = (words, isReset): [] => {
-    let index = 0;
-    if (isReset) {
-      setIsDone(false);
-      setCurrentWordIndex(0);
-      index = 0;
-    } else {
-      index = currentWordIndex;
-    }
-    return words.map((word, i) => {
-      return {
-        value: `${word}${i < words.length - 1 ? ' ' : ''}`,
-        className: index === i ? 'current' : undefined,
-      };
+  const initWords = (words: string[]) => {
+    const newWords = words.map((word, i) => {
+      let w = new Word(word);
+      if (i == 0) {
+        w.className = 'current';
+      }
+      return w;
     });
+    setWords(newWords);
   };
 
   const reset = (isButton?: boolean) => {
-    setIsDone(true);
-    getText();
     timer.pause();
     if (!isButton) {
       currentRound.calculateWPM(timer.getTime());
     }
     showScore();
+    initText();
   };
 
   useEffect(() => {
-    getText();
+    initText();
   }, []);
 
-  useEffect(() => {
-    const words = text.split(' ');
-    let formattedWords = formatWords(words, isDone);
-    setFormattedWords(formattedWords);
-    currentRound.setWordCount(formattedWords.length);
-  }, [text, isDone]);
-
   const handleKeyStroke = (keyStroke) => {
-    let nextWordIndex = currentWordIndex;
+    if (keyStroke !== words[currentWordIndex].value) {
+      words[currentWordIndex].className = 'error';
+      currentRound.addError();
+    } else if (keyStroke === words[currentWordIndex].value) {
+      words[currentWordIndex].className = 'done';
+    }
+
     if (isNotLastWord()) {
-      keyStroke = keyStroke.concat(' ');
-      nextWordIndex++;
-      formattedWords[nextWordIndex].className = 'current';
+      words[currentWordIndex + 1].className = 'current';
+      setCurrentWordIndex(currentWordIndex + 1);
     } else {
       // done
       reset();
     }
-
-    if (keyStroke === formattedWords[currentWordIndex].value) {
-      formattedWords[currentWordIndex].className = 'done';
-    } else {
-      formattedWords[currentWordIndex].className = 'error';
-      currentRound.addError();
-    }
-
-    setCurrentWordIndex(nextWordIndex);
   };
 
   const isNotLastWord = () => {
-    return currentWordIndex < formattedWords.length - 1;
+    return currentWordIndex < words.length - 1;
   };
 
   return (
     <div className="typing-box card">
-      <TextDisplay words={formattedWords} />
+      {words && <TextDisplay words={words} />}
       <InputBar
         handleKeyStroke={handleKeyStroke}
         handleRedo={reset}
